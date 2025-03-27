@@ -1,0 +1,29 @@
+{
+    "name": "mcp-node-service",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "bin": {
+        "mcp-node-service": "./build/index.js"
+    },
+    "scripts": {
+        "build": "tsc && chmod 755 build/index.js",
+        "start": "node build/index2.js"
+    },
+    "files": [
+        "build"
+    ],
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.7.0",
+        "lnexchange-api-test": "^1.0.5",
+        "zod": "^3.24.2"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.13",
+        "typescript": "^5.8.2"
+    }
+}
