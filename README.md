@@ -35,7 +35,8 @@ npm start
 
 
 ## npx
-xxxxxxxxxxxxxxxxxxxx Please replace with your Nostr private key
+Please replace with your Nostr private key:
+xxxxxxxxxxxxxxxxxxxx 
 
 ```bash
 {
