@@ -1,11 +1,17 @@
 // @ts-ignore
-import ExchangeAPI from "lnexchange-api-test";
+import { SPOTAPI, PERPAPI, Singer } from "lnexchange-api-test";
 
-export function createSpotApi(privateKey: string) {
-    return new ExchangeAPI.SPOTAPI({
-        env: "development",
-        privateKey: privateKey
+export function createSpotApi(spotApiEnv: any) {
+    const singer = spotApiEnv?.privateKey ? new Singer({
+        privateKey: spotApiEnv?.privateKey,
+    }) : undefined;
+
+    const spotApi = new SPOTAPI({
+        ...spotApiEnv,
+        singer: spotApiEnv?.privateKey ? singer : spotApiEnv?.singer,
     });
+
+    return spotApi;
 }
 
 export async function getAllMarketsData(spotApi: any) {

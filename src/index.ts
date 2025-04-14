@@ -14,14 +14,30 @@ import {
     depositAsset
 } from "./lnexchange_spots.js";
 
-async function main() {
-    const privateKey = process.argv[2];
-    if (!privateKey) {
-        console.error("Please provide private key as startup parameter");
-        process.exit(1);
+export const getMcpSpotServer = async (spotApiEnv: any) => {
+    let privateKey;
+    let spotApiEnvTemp = {};
+    //Check if running in browser
+    if (typeof window === "undefined") {
+        privateKey = process.argv[2];
+        if (!privateKey) {
+            console.error("Please provide private key as startup parameter");
+            process.exit(1);
+        }
+
+        spotApiEnvTemp = {
+            ...spotApiEnv,
+            privateKey
+        }
+
+    } else {
+        spotApiEnvTemp = {
+            ...spotApiEnv
+        }
     }
 
-    const spotApi = createSpotApi(privateKey);
+
+    const spotApi = createSpotApi(spotApiEnvTemp);
     await spotApi.init();
 
     const server = new McpServer({
@@ -204,12 +220,17 @@ async function main() {
         }
     );
 
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.error("Weather MCP Server running on stdio");
+    //Check if running in browser
+    if (typeof window === "undefined") {
+        const transport = new StdioServerTransport();
+        await server.connect(transport);
+        console.error("Weather MCP Server running on stdio");
+    }
+    return server;
 }
 
-main().catch((error) => {
+getMcpSpotServer({}).catch((error) => {
     console.error("Fatal error in main():", error);
     process.exit(1);
 });
+

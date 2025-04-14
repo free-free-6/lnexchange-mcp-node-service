@@ -1,8 +1,8 @@
 {
     "name": "lnexchange-mcp-node-service-test",
-    "version": "1.0.3",
+    "version": "1.0.5-beta.7",
     "description": "",
-    "main": "index.js",
+    "main": "./build/index.js",
     "type": "module",
     "bin": {
         "lnexchange-mcp-node-service-test": "./build/index.js"
@@ -19,7 +19,7 @@
     "license": "ISC",
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.7.0",
-        "lnexchange-api-test": "^1.0.5",
+        "lnexchange-api-test": "1.0.9-beta.2",
         "zod": "^3.24.2"
     },
     "devDependencies": {
