@@ -36,18 +36,21 @@ export async function cancelAllOrders(spotApi: any, params: any) {
 }
 
 export async function enableTrade(spotApi: any, symbolName: string) {
-    return await spotApi.enableTrade({ symbolName });
+    return await spotApi.enableTrade(symbolName);
 }
 
 export async function createUser(spotApi: any, referrals: string) {
-    return await spotApi.createUser({ referrals });
+    return await spotApi.createUser(referrals);
 }
 
 export async function approveToken(spotApi: any, tokenName: string, amount: string) {
-    return await spotApi.approve({ tokenName, amount });
+    return await spotApi.approve(tokenName, amount);
 }
 
 export async function depositAsset(spotApi: any, assetId: string, amount: string) {
-    return await spotApi.deposit({ assetId, amount });
+    return await spotApi.deposit(assetId, amount);
 }
 
+export async function withdrawAsset(spotApi: any, assetId: string, amount: string) {
+    return await spotApi.withdraw(assetId, amount);
+}

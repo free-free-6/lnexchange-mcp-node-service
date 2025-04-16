@@ -11,7 +11,8 @@ import {
     enableTrade,
     createUser,
     approveToken,
-    depositAsset
+    depositAsset,
+    withdrawAsset
 } from "./lnexchange_spots.js";
 
 export const getMcpSpotServer = async (spotApiEnv: any) => {
@@ -50,6 +51,23 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     });
 
     server.tool(
+        "getPublicInfo",
+        "Get LnExchange spot market public information (e.g. currencies, trading pairs)",
+        {},
+        async ({ }) => {
+            const publicInfo = await spotApi.init();
+            return {
+                content: [
+                    {
+                        type: "text",
+                        text: JSON.stringify(publicInfo),
+                    },
+                ],
+            };
+        },
+    );
+
+    server.tool(
         "getAllMarkets",
         "Get LnExchange spot market information",
         {},
@@ -65,6 +83,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             };
         },
     );
+
+
 
     server.tool(
         "getUserInfo",
@@ -127,6 +147,24 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
         },
         async ({ assetId, amount }) => {
             const result = await depositAsset(spotApi, assetId, amount);
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
+    server.tool(
+        "withdrawAsset",
+        "Withdraw assets",
+        {
+            assetId: z.string().describe("Asset ID"),
+            amount: z.string().describe("Deposit amount")
+        },
+        async ({ assetId, amount }) => {
+            const result = await withdrawAsset(spotApi, assetId, amount);
             return {
                 content: [{
                     type: "text",
