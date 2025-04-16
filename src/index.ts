@@ -51,8 +51,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     });
 
     server.tool(
-        "spotGetPublicInfo",
-        "Get LnExchange spot market public information (e.g. currencies, trading pairs, asset id)",
+        "SpotGetPublicInfo",
+        "LnExchange spot Get market public information (e.g. currencies, trading pairs, asset id)",
         {},
         async ({ }) => {
             const publicInfo = await spotApi.fetchPublicInfo();
@@ -68,8 +68,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotGetAllMarkets",
-        "Get LnExchange spot market information",
+        "SpotGetAllMarkets",
+        "LnExchange spot Get market information",
         {},
         async ({ }) => {
             const markets = await getAllMarketsData(spotApi);
@@ -87,8 +87,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
 
 
     server.tool(
-        "spotGetUserInfo",
-        "Get LnExchange spot user account",
+        "SpotGetUserInfo",
+        "LnExchange spot Get user account",
         {},
         async ({ }) => {
             const userInfo = await getUserInfoData(spotApi);
@@ -104,8 +104,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotCreateUser",
-        "Register LnExchange spot user",
+        "SpotCreateUser",
+        "LnExchange spot Register user",
         {
             referrals: z.string().optional().describe("Referral code")
         },
@@ -121,7 +121,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotApproveToken",
+        "SpotApproveToken",
         "LnExchange spot Approve token (Required before deposit)",
         {
             tokenName: z.string().describe("Token name"),
@@ -139,7 +139,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotDepositAsset",
+        "SpotDepositAsset",
         "LnExchange spot Deposit assets  (Requires prior token approval)",
         {
             assetId: z.string().describe("Asset ID"),
@@ -157,7 +157,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotWithdrawAsset",
+        "SpotWithdrawAsset",
         "LnExchange spot Withdraw assets",
         {
             assetId: z.string().describe("Asset ID"),
@@ -175,7 +175,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotCreateOrder",
+        "SpotCreateOrder",
         "LnExchange spot Create spot trading order",
         {
             symbol: z.string().describe("Trading pair symbol, e.g. BTC-USDT"),
@@ -202,7 +202,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotCancelOrder",
+        "SpotCancelOrder",
         "LnExchange spot Cancel spot trading order",
         {
             orderId: z.string().describe("Order ID"),
@@ -223,7 +223,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotCancelAllOrders",
+        "SpotCancelAllOrders",
         "LnExchange spot Cancel all spot trading orders",
         {
             symbol: z.string().optional().describe("Optional, specify trading pair symbol")
@@ -242,7 +242,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "spotEnableTrade",
+        "SpotEnableTrade",
         "LnExchange spot Enable spot trading pair",
         {
             symbolName: z.string().describe("Trading pair symbol")
