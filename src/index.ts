@@ -51,11 +51,11 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     });
 
     server.tool(
-        "getPublicInfo",
-        "Get LnExchange spot market public information (e.g. currencies, trading pairs)",
+        "spotGetPublicInfo",
+        "Get LnExchange spot market public information (e.g. currencies, trading pairs, asset id)",
         {},
         async ({ }) => {
-            const publicInfo = await spotApi.init();
+            const publicInfo = await spotApi.fetchPublicInfo();
             return {
                 content: [
                     {
@@ -68,7 +68,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "getAllMarkets",
+        "spotGetAllMarkets",
         "Get LnExchange spot market information",
         {},
         async ({ }) => {
@@ -87,8 +87,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
 
 
     server.tool(
-        "getUserInfo",
-        "Get LnExchange user account",
+        "spotGetUserInfo",
+        "Get LnExchange spot user account",
         {},
         async ({ }) => {
             const userInfo = await getUserInfoData(spotApi);
@@ -104,8 +104,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "createUser",
-        "Register LnExchange user",
+        "spotCreateUser",
+        "Register LnExchange spot user",
         {
             referrals: z.string().optional().describe("Referral code")
         },
@@ -121,8 +121,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "approveToken",
-        "Approve token trading",
+        "spotApproveToken",
+        "LnExchange spot Approve token (Required before deposit)",
         {
             tokenName: z.string().describe("Token name"),
             amount: z.string().describe("Approved amount")
@@ -139,8 +139,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "depositAsset",
-        "Deposit assets to exchange",
+        "spotDepositAsset",
+        "LnExchange spot Deposit assets  (Requires prior token approval)",
         {
             assetId: z.string().describe("Asset ID"),
             amount: z.string().describe("Deposit amount")
@@ -157,8 +157,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "withdrawAsset",
-        "Withdraw assets",
+        "spotWithdrawAsset",
+        "LnExchange spot Withdraw assets",
         {
             assetId: z.string().describe("Asset ID"),
             amount: z.string().describe("Deposit amount")
@@ -175,8 +175,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "createOrder",
-        "Create spot trading order",
+        "spotCreateOrder",
+        "LnExchange spot Create spot trading order",
         {
             symbol: z.string().describe("Trading pair symbol, e.g. BTC-USDT"),
             side: z.string().describe("Trade direction: BUY/SELL"),
@@ -202,8 +202,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "cancelOrder",
-        "Cancel spot trading order",
+        "spotCancelOrder",
+        "LnExchange spot Cancel spot trading order",
         {
             orderId: z.string().describe("Order ID"),
             symbolName: z.string().describe("Trading pair symbol")
@@ -223,8 +223,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "cancelAllOrders",
-        "Cancel all spot trading orders",
+        "spotCancelAllOrders",
+        "LnExchange spot Cancel all spot trading orders",
         {
             symbol: z.string().optional().describe("Optional, specify trading pair symbol")
         },
@@ -242,8 +242,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     );
 
     server.tool(
-        "enableTrade",
-        "Enable spot trading pair",
+        "spotEnableTrade",
+        "LnExchange spot Enable spot trading pair",
         {
             symbolName: z.string().describe("Trading pair symbol")
         },
