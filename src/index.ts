@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -267,7 +269,11 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     return server;
 }
 
-getMcpSpotServer({}).catch((error) => {
+getMcpSpotServer({
+    env: "development",
+    relay: "wss://dev-relay.lnfi.network",
+    baseURL: "https://dev-spots-api.unift.xyz"
+}).catch((error) => {
     console.error("Fatal error in main():", error);
     process.exit(1);
 });
