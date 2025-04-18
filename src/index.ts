@@ -7,10 +7,15 @@ import {
     createSpotApi,
     registerSpotTools
 } from "./lnexchange_spots.js";
+import {
+    createPerpetualApi,
+    registerPerpetualTools
+} from "./lnexchange_perpetual.js";
 
-export const getMcpSpotServer = async (spotApiEnv: any) => {
+export const getMcpLnExchangeServer = async (spotApiEnv: any, perpetualApiEnv: any) => {
     let privateKey;
     let spotApiEnvTemp = {};
+    let perpetualApiEnvTemp = {};
     //Check if running in browser
     if (typeof window === "undefined") {
         privateKey = process.argv[2];
@@ -24,15 +29,26 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             privateKey
         }
 
+        perpetualApiEnvTemp = {
+            ...perpetualApiEnv,
+            privateKey
+        }
+
     } else {
         spotApiEnvTemp = {
             ...spotApiEnv
+        }
+        perpetualApiEnvTemp = {
+            ...perpetualApiEnv
         }
     }
 
 
     const spotApi = createSpotApi(spotApiEnvTemp);
     await spotApi.init();
+
+    const perpetualApi = createPerpetualApi(perpetualApiEnvTemp);
+    await perpetualApi.init();
 
     const server = new McpServer({
         name: "mcp-node-service",
@@ -46,6 +62,8 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
 
     //register spot tools
     registerSpotTools(server, spotApi);
+    //register perpetual tools
+    registerPerpetualTools(server, perpetualApi);
 
 
 
@@ -58,10 +76,14 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
     return server;
 }
 
-getMcpSpotServer({
+getMcpLnExchangeServer({
     env: "development",
     relay: "wss://dev-relay.lnfi.network",
     baseURL: "https://dev-spots-api.unift.xyz"
+}, {
+    env: "development",
+    relay: "wss://dev-relay.lnfi.network",
+    baseURL: "https://dev-futures-api.unift.xyz"
 }).catch((error) => {
     console.error("Fatal error in main():", error);
     process.exit(1);

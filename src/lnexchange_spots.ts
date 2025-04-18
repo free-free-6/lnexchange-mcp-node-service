@@ -91,7 +91,7 @@ export function registerSpotTools(server: McpServer, spotApi: any) {
 
     server.tool(
         "SpotApproveToken",
-        "LnExchange spot Approve token (Required before deposit)",
+        "LnExchange spot Approve token (Required before SpotDepositAsset)",
         {
             tokenName: z.string().describe("Token name"),
             amount: z.string().describe("Approved amount")
