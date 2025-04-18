@@ -142,9 +142,9 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
 
     server.tool(
         "SpotDepositAsset",
-        "LnExchange spot Deposit assets  (Requires prior token approval)",
+        "LnExchange spot Deposit assets (Requires calling SpotApproveToken first)",
         {
-            assetId: z.string().describe("Asset ID"),
+            assetId: z.string().describe("Asset ID (can be obtained from SpotGetPublicInfo)"),
             amount: z.string().describe("Deposit amount")
         },
         async ({ assetId, amount }) => {
@@ -162,7 +162,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
         "SpotWithdrawAsset",
         "LnExchange spot Withdraw assets",
         {
-            assetId: z.string().describe("Asset ID"),
+            assetId: z.string().describe("Asset ID (can be obtained from SpotGetPublicInfo)"),
             amount: z.string().describe("Deposit amount")
         },
         async ({ assetId, amount }) => {
@@ -259,6 +259,145 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             };
         }
     );
+
+
+    server.tool(
+        "SpotGetCurrentOrders",
+        "LnExchange spot Get current orders for a trading pair",
+        {
+            symbolName: z.string().describe("Trading pair symbol"),
+            page: z.number().optional().describe("Page number (default: 1)"),
+            limit: z.number().optional().describe("Items per page (default: 10)"),
+            type: z.string().optional().describe("Order type filter")
+        },
+        async ({ symbolName, page, limit, type }) => {
+            const result = await spotApi.currentOrderList({
+                symbolName,
+                page,
+                limit,
+                type
+            });
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
+    server.tool(
+        "SpotGetTriggerOrders",
+        "LnExchange spot Get trigger orders for a trading pair",
+        {
+            symbolName: z.string().describe("Trading pair symbol"),
+            page: z.number().optional().describe("Page number (default: 1)"),
+            limit: z.number().optional().describe("Items per page (default: 10)"),
+            type: z.string().optional().describe("Order type filter")
+        },
+        async ({ symbolName, page, limit, type }) => {
+            const result = await spotApi.triggerOrderList({
+                symbolName,
+                page,
+                limit,
+                type
+            });
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
+    server.tool(
+        "SpotGetHistoryOrders",
+        "LnExchange spot Get historical orders for a trading pair",
+        {
+            symbolName: z.string().describe("Trading pair symbol"),
+            page: z.number().optional().describe("Page number (default: 1)"),
+            limit: z.number().optional().describe("Items per page (default: 10)"),
+            type: z.string().optional().describe("Order type filter"),
+            beginTime: z.string().optional().describe("Start time filter"),
+            endTime: z.string().optional().describe("End time filter")
+        },
+        async ({ symbolName, page, limit, type, beginTime, endTime }) => {
+            const result = await spotApi.historyOrderList({
+                symbolName,
+                page,
+                limit,
+                type,
+                beginTime,
+                endTime
+            });
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
+    server.tool(
+        "SpotGetHistoryTriggerOrders",
+        "LnExchange spot Get historical trigger orders for a trading pair",
+        {
+            symbolName: z.string().describe("Trading pair symbol"),
+            page: z.number().optional().describe("Page number (default: 1)"),
+            limit: z.number().optional().describe("Items per page (default: 10)"),
+            type: z.string().optional().describe("Order type filter"),
+            beginTime: z.string().optional().describe("Start time filter"),
+            endTime: z.string().optional().describe("End time filter")
+        },
+        async ({ symbolName, page, limit, type, beginTime, endTime }) => {
+            const result = await spotApi.historyTriggerOrderList({
+                symbolName,
+                page,
+                limit,
+                type,
+                beginTime,
+                endTime
+            });
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
+    server.tool(
+        "SpotGetTradeHistory",
+        "LnExchange spot Get trade history for a trading pair",
+        {
+            symbolName: z.string().describe("Trading pair symbol"),
+            page: z.number().optional().describe("Page number (default: 1)"),
+            limit: z.number().optional().describe("Items per page (default: 10)"),
+            type: z.string().optional().describe("Order type filter"),
+            beginTime: z.string().optional().describe("Start time filter"),
+            endTime: z.string().optional().describe("End time filter")
+        },
+        async ({ symbolName, page, limit, type, beginTime, endTime }) => {
+            const result = await spotApi.hisTradeList({
+                symbolName,
+                page,
+                limit,
+                type,
+                beginTime,
+                endTime
+            });
+            return {
+                content: [{
+                    type: "text",
+                    text: JSON.stringify(result)
+                }]
+            };
+        }
+    );
+
 
     //Check if running in browser
     if (typeof window === "undefined") {
