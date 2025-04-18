@@ -4,17 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import {
-    createSpotApi,
-    getAllMarketsData,
-    getUserInfoData,
-    createOrder,
-    cancelOrder,
-    cancelAllOrders,
-    enableTrade,
-    createUser,
-    approveToken,
-    depositAsset,
-    withdrawAsset
+    createSpotApi
 } from "./lnexchange_spots.js";
 
 export const getMcpSpotServer = async (spotApiEnv: any) => {
@@ -74,7 +64,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
         "LnExchange spot Get market information",
         {},
         async ({ }) => {
-            const markets = await getAllMarketsData(spotApi);
+            const markets = await spotApi.getAllMarkets();
             return {
                 content: [
                     {
@@ -93,7 +83,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
         "LnExchange spot Get user account",
         {},
         async ({ }) => {
-            const userInfo = await getUserInfoData(spotApi);
+            const userInfo = await spotApi.getUserInfo();
             return {
                 content: [
                     {
@@ -112,7 +102,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             referrals: z.string().optional().describe("Referral code")
         },
         async ({ referrals }) => {
-            const result = await createUser(spotApi, referrals || "");
+            const result = await spotApi.createUser(referrals || "");
             return {
                 content: [{
                     type: "text",
@@ -130,7 +120,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             amount: z.string().describe("Approved amount")
         },
         async ({ tokenName, amount }) => {
-            const result = await approveToken(spotApi, tokenName, amount);
+            const result = await spotApi.approve(tokenName, amount);
             return {
                 content: [{
                     type: "text",
@@ -148,7 +138,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             amount: z.string().describe("Deposit amount")
         },
         async ({ assetId, amount }) => {
-            const result = await depositAsset(spotApi, assetId, amount);
+            const result = await spotApi.deposit(assetId, amount);
             return {
                 content: [{
                     type: "text",
@@ -166,7 +156,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             amount: z.string().describe("Deposit amount")
         },
         async ({ assetId, amount }) => {
-            const result = await withdrawAsset(spotApi, assetId, amount);
+            const result = await spotApi.withdraw(assetId, amount);
             return {
                 content: [{
                     type: "text",
@@ -187,7 +177,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             price: z.string().optional().describe("Limit order price")
         },
         async ({ symbol, side, type, volume, price }) => {
-            const result = await createOrder(spotApi, {
+            const result = await spotApi.createOrderApi({
                 symbol,
                 side,
                 type,
@@ -211,7 +201,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             symbolName: z.string().describe("Trading pair symbol")
         },
         async ({ orderId, symbolName }) => {
-            const result = await cancelOrder(spotApi, {
+            const result = await spotApi.cancelOrder({
                 orderId,
                 symbolName
             });
@@ -231,7 +221,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             symbol: z.string().optional().describe("Optional, specify trading pair symbol")
         },
         async ({ symbol }) => {
-            const result = await cancelAllOrders(spotApi, {
+            const result = await spotApi.cancelAllOrder({
                 symbol
             });
             return {
@@ -250,7 +240,7 @@ export const getMcpSpotServer = async (spotApiEnv: any) => {
             symbolName: z.string().describe("Trading pair symbol")
         },
         async ({ symbolName }) => {
-            const result = await enableTrade(spotApi, symbolName);
+            const result = await spotApi.enableTrade(symbolName);
             return {
                 content: [{
                     type: "text",
